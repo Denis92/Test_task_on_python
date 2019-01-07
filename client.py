@@ -1,4 +1,4 @@
-from funct_for_zmq import Main_Class
+from modul_for_term import Main_Class
 import zmq
 
 
