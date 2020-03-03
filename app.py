@@ -1,3 +1,5 @@
+import os
+
 import aiomongodel
 from aiohttp import web
 import json
@@ -24,9 +26,11 @@ schema = {
 }
 
 route = web.RouteTableDef()
+mongo_url = os.environ.get("MONGODB_HOSTNAME", "127.0.0.1")
+mongo_connect = f"mongodb://{mongo_url}:27017"
 
 
-async def say_hello(login_email, password_email, message_recipient, subject, text):
+async def send_email(login_email, password_email, message_recipient, subject, text):
     message = EmailMessage()
     message["From"] = login_email
     message["To"] = message_recipient
@@ -51,7 +55,7 @@ async def say_hello(login_email, password_email, message_recipient, subject, tex
 @route.post('/send')
 async def handle(request):
     try:
-        client = AsyncIOMotorClient("mongodb://127.0.0.1:27017/")
+        client = AsyncIOMotorClient(mongo_connect)
         db = client.aiomongodel
         _id = datetime.timestamp(datetime.now())
 
@@ -74,7 +78,7 @@ async def handle(request):
             message_recipient = json_req.get("message_recipient")
             subject = json_req.get("subject")
             text = json_req.get("text")
-            resp = await say_hello(login_email, password_email, message_recipient, subject, text)
+            resp = await send_email(login_email, password_email, message_recipient, subject, text)
             await Mail.q(db=db).create(_id=_id, send_status=f"{resp}", date_time=datetime.now())
             return web.Response(text=json.dumps({"id": _id, "status": resp}))
         except jsonschema.exceptions.ValidationError as e:
@@ -90,7 +94,7 @@ async def handle(request):
 @route.get('/get-result')
 async def handler(request):
     try:
-        client = AsyncIOMotorClient("mongodb://127.0.0.1:27017/")
+        client = AsyncIOMotorClient(mongo_connect)
         db = client.aiomongodel
         id_send_email = request.rel_url.query["id_send_email"]
         mail = await Mail.q(db).get(f"{id_send_email}")
@@ -106,4 +110,4 @@ async def handler(request):
 app = web.Application()
 app.add_routes(route)
 
-web.run_app(app, port=5000, host="127.0.0.1")
+web.run_app(app, port=5000)
