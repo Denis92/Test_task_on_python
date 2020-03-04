@@ -1,0 +1,15 @@
+web:
+  build: .
+  ports:
+    - "5000:5000"
+  entrypoint: python app.py
+  volumes:
+    - .:/app
+  links:
+    - db
+  environment:
+    MONGODB_HOSTNAME: db
+db:
+  ports:
+    - "27017:27017"
+  image: mongo
