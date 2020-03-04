@@ -1,6 +1,6 @@
 ### Инструкция по разворачиванию решения.
 1. Клонируем репозиторий
-2. git clone -b KODE https://github.com/Denis92/Test_task_on_python.git
+2. git clone -b develop_KODE https://github.com/Denis92/Test_task_on_python.git
 3. Переходим в папку с приложением
  
 Само решение можно развернуть двумя способами
