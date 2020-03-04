@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {
+        "login_email": {"type": "string"},
+        "password_email": {"type": "string"},
+        "message_recipient": {"type": "string"},
+        "subject": {"type": "string"},
+        "text": {"type": "string"}
+    },
+    "required": ["login_email", "password_email", "message_recipient", "subject", "text"]
+}
