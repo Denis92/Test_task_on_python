@@ -40,7 +40,7 @@
 
 Пример:
 Запрос
-/get-result?id_send_email=1583271127.953396
+/get-result?id_send_email=1583302178.461387
 
 Ответ
 ```
